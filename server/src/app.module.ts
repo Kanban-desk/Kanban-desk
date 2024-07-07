@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { envConfigSchema } from './configuration';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'client'),
     }),
+    UserModule,
 ],
   controllers: [AppController],
   providers: [AppService],
