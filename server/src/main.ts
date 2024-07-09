@@ -26,6 +26,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
 
+  app.useGlobalPipes(new ValidationPipe());
+
   const port = Number(process.env.PORT) || 3000;
   console.log(port);
   await app.listen(port);
