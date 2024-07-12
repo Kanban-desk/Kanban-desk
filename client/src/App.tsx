@@ -1,18 +1,10 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import './App.css'
+import { SignUpPage } from './pages/sign-up'
 
 function App() {
-  const [text, setText] = useState("");
-  useEffect(() => {
-    fetch("/api/")
-      .then((response) => response.text())
-      .then((data) => setText(data));
-  });
   return (
-    <>
-      <div>{text}</div>
-    </>
-  );
+    <SignUpPage />
+  )
 }
 
-export default App;
+export default App
