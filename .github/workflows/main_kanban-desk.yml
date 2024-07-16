@@ -44,13 +44,13 @@ jobs:
           AZURE_SQL_PASSWORD: ${{secrets.AZURE_SQL_PASSWORD}}
           AZURE_SQL_PORT: ${{secrets.AZURE_SQL_PORT}}
         run: |
-          cd ../server
+          cd server
           npm run migration:run
 
       - name: Prepare deployment artifact
         run: |
-          mv node_modules dist/node_modules
-          mv ../client/dist dist/client
+          mv server/node_modules server/dist/node_modules
+          mv client/dist server/dist/client
 
       - name: Zip artifact for deployment
         run: zip release.zip ./server/dist/* -r
