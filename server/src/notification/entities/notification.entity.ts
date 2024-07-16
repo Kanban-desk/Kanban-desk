@@ -18,7 +18,7 @@ export class Notification {
     @Column({ type: "bit", default: 0 })
     is_seen: number;
 
-    @CreateDateColumn({ type: "timestamp with time zone" })
+    @CreateDateColumn({ type: "datetime2" })
     send_date: Date;
 
     @ManyToOne(() => User)

@@ -9,22 +9,22 @@ export class Task {
     @PrimaryGeneratedColumn()
     task_id: number;
 
-    @Column({ type: "varchar", length: 100 })
+    @Column({ type: "nvarchar", length: 100 })
     name: string;
 
-    @Column({ type: "varchar", length: 1028 })
+    @Column({ type: "nvarchar", length: 1028 })
     description: string;
     
-    @Column({ type: "timestamp with time zone", nullable: true })
+    @Column({ type: "datetime2", nullable: true })
     start_date: Date;
 
-    @Column({ type: "timestamp with time zone", nullable: true })
+    @Column({ type: "datetime2", nullable: true })
     end_date: Date;
 
-    @Column({ type:"varchar", length: 40 })
+    @Column({ type:"nvarchar", length: 40 })
     tags: string[];
 
-    @CreateDateColumn({ type: "timestamp with time zone" })
+    @CreateDateColumn({ type: "datetime2" })
     publication_date: Date;
 
     @OneToMany(() => Comment, (comment) => comment.task)

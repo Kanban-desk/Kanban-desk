@@ -7,10 +7,10 @@ export class Comment {
     @PrimaryGeneratedColumn()
     comment_id: number;
 
-    @Column({ type: "varchar", length: 2056 })
+    @Column({ type: "nvarchar", length: 2056 })
     content: string;
 
-    @CreateDateColumn({ type: "timestamp with time zone" })
+    @CreateDateColumn({ type: "datetime2" })
     publication_date: Date;
 
     @ManyToOne(() => Task, (task) => task.comments)

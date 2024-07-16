@@ -7,10 +7,10 @@ export class Desk {
     @PrimaryGeneratedColumn()
     desk_id: number;
 
-    @Column({ type: "varchar", length: 100 })
+    @Column({ type: "nvarchar", length: 100 })
     name: string;
 
-    @Column({ type: "varchar", length: 100, unique: true })
+    @Column({ type: "nvarchar", length: 100, unique: true })
     avatar_path: string;
     
     @ManyToOne(() => User, (user) => user.desks)
