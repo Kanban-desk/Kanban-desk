@@ -12,9 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -23,10 +20,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-
-      - name: Public IP
-        id: ip
-        uses: haythem/public-ip@v1.3
 
       - name: npm install, build, and test
         run: |
@@ -43,13 +36,6 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5AC3F3CD9D0C4ACAB8ED4FFA891B22D3 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_19DDC1F8896A4EE6949E2D535E1C2272 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C4683613699A4C5CA62D74BDD61CB171 }}    
-
       - name: Deploy database
         env:
           AZURE_SQL_DATABASE: ${{secrets.AZURE_SQL_DATABASE}}
@@ -58,10 +44,8 @@ jobs:
           AZURE_SQL_PASSWORD: ${{secrets.AZURE_SQL_PASSWORD}}
           AZURE_SQL_PORT: ${{secrets.AZURE_SQL_PORT}}
         run: |
-          az sql server firewall-rule create --resource-group Kanban --server $AZURE_SQL_SERVER --name GithubAction --start-ip-address ${{ steps.ip.outputs.ipv4 }} --end-ip-address ${{ steps.ip.outputs.ipv4 }}
           cd server
           npm run migration:run
-          az sql server firewall-rule delete --resource-group Kanban --server $AZURE_SQL_SERVER --name GithubAction
 
       - name: Prepare deployment artifact
         run: |
