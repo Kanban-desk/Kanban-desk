@@ -11,8 +11,7 @@ export const AppDataSource = new DataSource({
   password: process.env.AZURE_SQL_PASSWORD,
   database: process.env.AZURE_SQL_DATABASE,
   options: {
-    encrypt: false,
-    trustServerCertificate: true,
+    encrypt: process.env.NODE_ENV !== "development",
   },
   entities: ['dist/**/entities/*.entity.js'],
   migrations: ['dist/**/migrations/*.js'],
