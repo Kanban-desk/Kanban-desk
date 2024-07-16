@@ -21,6 +21,10 @@ jobs:
         with:
           node-version: '20.x'
 
+      - name: Public IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+
       - name: npm install, build, and test
         run: |
           cd server
@@ -44,8 +48,10 @@ jobs:
           AZURE_SQL_PASSWORD: ${{secrets.AZURE_SQL_PASSWORD}}
           AZURE_SQL_PORT: ${{secrets.AZURE_SQL_PORT}}
         run: |
+          az sql server firewall-rule create --resource-group YourResourceGroupName --server $AZURE_SQL_SERVER --name GithubAction --start-ip-address ${{ steps.ip.outputs.ipv4 }} --end-ip-address ${{ steps.ip.outputs.ipv4 }}
           cd server
           npm run migration:run
+          az sql server firewall-rule delete --resource-group YourResourceGroupName --server $AZURE_SQL_SERVER --name GithubAction
 
       - name: Prepare deployment artifact
         run: |
