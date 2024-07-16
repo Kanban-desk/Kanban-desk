@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { envConfigSchema } from './configuration';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { AppDataSource } from './data-source';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'client'),
     }),
+    TypeOrmModule.forRoot({...AppDataSource.options, autoLoadEntities: true})
 ],
   controllers: [AppController],
   providers: [AppService],
