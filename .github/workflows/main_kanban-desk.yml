@@ -31,15 +31,12 @@ jobs:
           npm i -g ts-node
           npm run build --if-present
           npm run test --if-present
-          mv node_modules dist/node_modules
           cd ../client
           npm install
           npm run build --if-present
           npm run test --if-present
-          mv dist ../server/dist/client
 
       - name: Deploy database
-        shell: bash
         env:
           AZURE_SQL_DATABASE: ${{secrets.AZURE_SQL_DATABASE}}
           AZURE_SQL_SERVER: ${{secrets.AZURE_SQL_SERVER}}
@@ -47,9 +44,14 @@ jobs:
           AZURE_SQL_PASSWORD: ${{secrets.AZURE_SQL_PASSWORD}}
           AZURE_SQL_PORT: ${{secrets.AZURE_SQL_PORT}}
         run: |
-          cd server
+          cd ../server
           npm run migration:run
-         
+
+      - name: Prepare deployment artifact
+        run: |
+          mv node_modules dist/node_modules
+          mv ../client/dist dist/client
+
       - name: Zip artifact for deployment
         run: zip release.zip ./server/dist/* -r
 
