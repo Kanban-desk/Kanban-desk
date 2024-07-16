@@ -27,6 +27,7 @@ jobs:
           npm install
           npm install -g @nestjs/cli
           npm install -g jest
+          npm i -g typeorm
           npm run build --if-present
           npm run test --if-present
           mv node_modules dist/node_modules
