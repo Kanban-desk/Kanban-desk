@@ -12,10 +12,12 @@ import { PassportModule } from '@nestjs/passport';
 import { Token } from './entities/token.entity';
 import { TokenService } from './services/token.service';
 import { TokenExtractorMiddleware } from './middleware/extract-token.middleware';
+import { Desk } from 'src/desk/entities/desk.entity';
+import { Notification } from 'src/notification/entities/notification.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Token]),
+    TypeOrmModule.forFeature([User, Token, Desk, Notification]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.APP_SECRET,
