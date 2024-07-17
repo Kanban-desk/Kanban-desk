@@ -23,40 +23,15 @@ jobs:
 
       - name: npm install, build, and test
         run: |
-          cd server
-          npm install
-          npm install -g @nestjs/cli
-          npm install -g jest
-          npm i -g typeorm
-          npm i -g ts-node
-          npm run build --if-present
-          npm run test --if-present
-          cd ../client
           npm install
           npm run build --if-present
           npm run test --if-present
-
-      - name: Deploy database
-        env:
-          AZURE_SQL_DATABASE: ${{secrets.AZURE_SQL_DATABASE}}
-          AZURE_SQL_SERVER: ${{secrets.AZURE_SQL_SERVER}}
-          AZURE_SQL_USERNAME: ${{secrets.AZURE_SQL_USERNAME}}
-          AZURE_SQL_PASSWORD: ${{secrets.AZURE_SQL_PASSWORD}}
-          AZURE_SQL_PORT: ${{secrets.AZURE_SQL_PORT}}
-        run: |
-          cd server
-          npm run migration:run
-
-      - name: Prepare deployment artifact
-        run: |
-          mv server/node_modules server/dist/node_modules
-          mv client/dist server/dist/client
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./server/dist/* -r
+        run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: node-app
           path: release.zip
@@ -70,9 +45,9 @@ jobs:
     permissions:
       id-token: write #This is required for requesting the JWT
 
-    steps:          
+    steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: node-app
 
@@ -80,15 +55,15 @@ jobs:
         run: unzip release.zip
       
       - name: Login to Azure
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5AC3F3CD9D0C4ACAB8ED4FFA891B22D3 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_19DDC1F8896A4EE6949E2D535E1C2272 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C4683613699A4C5CA62D74BDD61CB171 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4C056EAE224541E4AC10060AA500C439 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AFC9FDE736424462842E02432DF6EE44 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4F08F1BBD1BA4E6E9D274E53F0757FE8 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'kanban-desk'
           slot-name: 'Production'
