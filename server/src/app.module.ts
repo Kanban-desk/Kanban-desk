@@ -8,6 +8,9 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppDataSource } from './data-source';
 import { UserModule } from './user/user.module';
+import { TaskModule } from './task/task.module';
+import { NotificationModule } from './notification/notification.module';
+import { DeskModule } from './desk/desk.module';
 
 @Module({
   imports: [
@@ -17,6 +20,9 @@ import { UserModule } from './user/user.module';
     }),
     TypeOrmModule.forRoot({...AppDataSource.options, autoLoadEntities: true}),
     UserModule,
+    TaskModule,
+    NotificationModule,
+    DeskModule
 ],
   controllers: [AppController],
   providers: [AppService],
