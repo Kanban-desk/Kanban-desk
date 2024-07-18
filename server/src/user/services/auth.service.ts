@@ -13,6 +13,7 @@ import { instanceToPlain } from 'class-transformer';
 import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '../interface/jwt-payload.interface';
 import { TokenService } from './token.service';
+import { TokensDto } from '../dto/tokens.dto';
 
 @Injectable()
 export class AuthService {
@@ -38,9 +39,7 @@ export class AuthService {
       );
     }
 
-    const tokens = await this.createTokens(user);
-
-    return { plainUser, tokens };
+    return { plainUser }
   }
 
   async register(signUpDto: SignUpDto): Promise<object> {
@@ -63,9 +62,7 @@ export class AuthService {
     const user = await this.userService.create(signUpDto);
     const plainUser = instanceToPlain(user) as User;
 
-    const tokens = await this.createTokens(user);
-
-    return { plainUser, tokens };
+    return plainUser
   }
 
   async refreshTokens(
@@ -136,7 +133,9 @@ export class AuthService {
     });
   }
 
-  async createTokens(user: User): Promise<object> {
+  async createTokens(user: User): Promise<TokensDto> {
+    console.log(`User from CreateTokens ${user}`);
+
     const accessToken = this.signToken(user);
     const refreshToken = this.signRefreshToken(user);
 

@@ -18,20 +18,20 @@ export class User {
   @PrimaryGeneratedColumn()
   user_id: number;
 
-  @Column({ type: 'varchar', length: 15, nullable: true })
+  @Column({ type: 'nvarchar', length: 15, nullable: true })
   first_name: string;
 
-  @Column({ type: 'varchar', length: 15, nullable: true })
+  @Column({ type: 'nvarchar', length: 15, nullable: true })
   last_name: string;
 
-  @Column({ type: 'varchar', length: 50, unique: true })
+  @Column({ type: 'nvarchar', length: 50, unique: true })
   email: string;
 
   @Exclude()
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'nvarchar', length: 255 })
   password: string;
 
-  @Column({ type: 'varchar', length: 512, unique: true, nullable: true })
+  @Column({ type: 'nvarchar', length: 512, nullable: true })
   avatar_path: string;
 
   @OneToMany(() => Desk, (desk) => desk.author)

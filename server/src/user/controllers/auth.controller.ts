@@ -9,6 +9,7 @@ import {
   Body,
   Get,
   Res,
+  UseInterceptors,
 } from '@nestjs/common';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { Request, Response } from 'express';
@@ -18,6 +19,7 @@ import { GoogleAuthGuard } from '../guards/google-auth.guard';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { RefreshTokenDto } from '../dto/refreshToken.dto';
+import { TokenInterceptor } from '../interceptors/token.interceptor';
 
 @Controller('auth')
 export class AuthController {
@@ -26,12 +28,14 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  login(@Body() loginDto: LoginDto, @Req() req: Request) {
-    return req.user;
+  @UseInterceptors(TokenInterceptor)
+  login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(TokenInterceptor)
   register(@Body() signUpDto: SignUpDto) {
     return this.authService.register(signUpDto);
   }

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity('tokens')
@@ -9,13 +9,13 @@ export class Token {
   @Column({ type: 'varchar', length: 512, unique: true })
   token: string;
 
-  @Column({ type: 'datetime2' })
+  @Column({ type: "datetime2" })
   expires_at: Date;
 
-  @Column({ type: 'datetime2', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: "datetime2", default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @Column({ type: 'datetime2', nullable: true })
+  @Column({ type: "datetime2", nullable: true })
   revoked_at: Date;
 
   @Column({ default: false })
