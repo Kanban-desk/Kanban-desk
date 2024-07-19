@@ -6,7 +6,9 @@ import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   app.use(cookieParser(process.env.APP_SECRET));
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('Kanban-desk')
@@ -23,9 +25,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
-
-  app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe());
 
   const port = Number(process.env.PORT) || 3000;
   console.log(port);

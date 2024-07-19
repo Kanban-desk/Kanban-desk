@@ -10,6 +10,7 @@ import {
   Get,
   Res,
   UseInterceptors,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { Request, Response } from 'express';
@@ -18,7 +19,6 @@ import { SignUpDto } from '../dto/sign-up.dto';
 import { GoogleAuthGuard } from '../guards/google-auth.guard';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { RefreshTokenDto } from '../dto/refreshToken.dto';
 import { TokenInterceptor } from '../interceptors/token.interceptor';
 
 @Controller('auth')
@@ -33,6 +33,29 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
+  @Post('logout')
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
+  async logout(@Req() req: Request, @Res() res: Response) {
+    const { refreshToken } = req.signedCookies;
+    res.clearCookie('refreshToken');
+
+    try {
+      const result = await this.authService.logout(refreshToken);
+      return res.status(HttpStatus.OK).json(result);
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        return res
+          .status(HttpStatus.UNAUTHORIZED)
+          .json({ message: error.message });
+      } else {
+        return res
+          .status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .json({ message: error.message });
+      }
+    }
+  }
+
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(TokenInterceptor)
@@ -42,15 +65,11 @@ export class AuthController {
 
   @Post('refresh')
   @ApiBearerAuth('jwt')
+  @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  async refreshTokens(
-    @Req() req: Request,
-    @Body() refreshTokenDto: RefreshTokenDto,
-  ) {
-    return this.authService.refreshTokens(
-      req['accessToken'],
-      refreshTokenDto.refreshToken,
-    );
+  refreshTokens(@Req() req: Request) {
+    const { refreshToken } = req.cookies;
+    return this.authService.refreshTokens(req['accessToken'], refreshToken);
   }
 
   @Get('google')

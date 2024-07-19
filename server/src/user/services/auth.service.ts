@@ -1,6 +1,8 @@
 import { LoginDto } from './../dto/login.dto';
 import {
+  BadRequestException,
   ConflictException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -23,9 +25,8 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async login({ email, password }: LoginDto): Promise<object> {
+  async login({ email, password }: LoginDto): Promise<User> {
     let user: User;
-    const plainUser = instanceToPlain(user) as User;
 
     try {
       user = await this.userService.findOne({ where: { email } });
@@ -39,10 +40,12 @@ export class AuthService {
       );
     }
 
-    return { plainUser }
+    const plainUser = instanceToPlain(user) as User;
+
+    return plainUser;
   }
 
-  async register(signUpDto: SignUpDto): Promise<object> {
+  async register(signUpDto: SignUpDto): Promise<User> {
     try {
       const user = await this.userService.findOne({
         where: { email: signUpDto.email },
@@ -56,13 +59,29 @@ export class AuthService {
       if (!(error instanceof NotFoundException)) {
         throw error;
       }
-      // Если пользователь не найден, это нормально для регистрации
+      // If the user is not found, it is normal for registration
     }
 
     const user = await this.userService.create(signUpDto);
     const plainUser = instanceToPlain(user) as User;
 
-    return plainUser
+    return plainUser;
+  }
+
+  async logout(refreshToken: string): Promise<object> {
+    console.log('Refresh Token from logout service', refreshToken);
+    try {
+      await this.tokenService.revokeToken(refreshToken);
+      return { statusCode: HttpStatus.OK, message: 'Logout successful' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new UnauthorizedException('Invalid refresh token');
+      } else if (error instanceof InternalServerErrorException) {
+        throw new InternalServerErrorException(
+          'An unexpected error occurred during logout',
+        );
+      }
+    }
   }
 
   async refreshTokens(
@@ -134,8 +153,6 @@ export class AuthService {
   }
 
   async createTokens(user: User): Promise<TokensDto> {
-    console.log(`User from CreateTokens ${user}`);
-
     const accessToken = this.signToken(user);
     const refreshToken = this.signRefreshToken(user);
 

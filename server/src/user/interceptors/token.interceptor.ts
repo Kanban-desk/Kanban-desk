@@ -21,7 +21,6 @@ import {
     ): Observable<any> {
       return next.handle().pipe(
         map(async (user) => {
-          console.log(user);
           const response = context.switchToHttp().getResponse<Response>();
           const { accessToken, refreshToken } = await this.authService.createTokens(user);
   
