@@ -1,6 +1,5 @@
 import { LoginDto } from './../dto/login.dto';
 import {
-  BadRequestException,
   ConflictException,
   HttpStatus,
   Injectable,
@@ -87,9 +86,9 @@ export class AuthService {
   async refreshTokens(
     accessToken: string,
     refreshToken: string,
-  ): Promise<string> {
+  ): Promise<object> {
     try {
-      const accessPayload = this.jwtService.verify(accessToken);
+      const accessPayload = this.jwtService.decode(accessToken);
       const refreshPayload = this.jwtService.verify(refreshToken);
 
       if (accessPayload.sub !== refreshPayload.sub) {
@@ -97,7 +96,7 @@ export class AuthService {
       }
 
       const user = await this.userService.findOne({
-        where: { email: accessPayload.sub },
+        where: { email: refreshPayload.sub },
       });
       if (!user) {
         throw new UnauthorizedException('User not found');
@@ -110,7 +109,7 @@ export class AuthService {
 
       accessToken = this.signToken(user);
 
-      return accessToken;
+      return { accessToken };
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;

@@ -63,12 +63,11 @@ export class AuthController {
     return this.authService.register(signUpDto);
   }
 
-  @Post('refresh')
+  @Get('refresh')
   @ApiBearerAuth('jwt')
-  @UseGuards(LocalAuthGuard)
-  @HttpCode(HttpStatus.OK)
   refreshTokens(@Req() req: Request) {
-    const { refreshToken } = req.cookies;
+    const { refreshToken } = req.signedCookies;
+    // console.log(this.authService.refreshTokens(req['accessToken'], refreshToken));
     return this.authService.refreshTokens(req['accessToken'], refreshToken);
   }
 
