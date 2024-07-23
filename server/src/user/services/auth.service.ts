@@ -1,6 +1,7 @@
 import { LoginDto } from './../dto/login.dto';
 import {
   ConflictException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -13,6 +14,7 @@ import { instanceToPlain } from 'class-transformer';
 import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '../interface/jwt-payload.interface';
 import { TokenService } from './token.service';
+import { TokensDto } from '../dto/tokens.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,9 +24,8 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async login({ email, password }: LoginDto): Promise<object> {
+  async login({ email, password }: LoginDto): Promise<User> {
     let user: User;
-    const plainUser = instanceToPlain(user) as User;
 
     try {
       user = await this.userService.findOne({ where: { email } });
@@ -38,12 +39,12 @@ export class AuthService {
       );
     }
 
-    const tokens = await this.createTokens(user);
+    const plainUser = instanceToPlain(user) as User;
 
-    return { plainUser, tokens };
+    return plainUser;
   }
 
-  async register(signUpDto: SignUpDto): Promise<object> {
+  async register(signUpDto: SignUpDto): Promise<User> {
     try {
       const user = await this.userService.findOne({
         where: { email: signUpDto.email },
@@ -57,23 +58,37 @@ export class AuthService {
       if (!(error instanceof NotFoundException)) {
         throw error;
       }
-      // Если пользователь не найден, это нормально для регистрации
+      // If the user is not found, it is normal for registration
     }
 
     const user = await this.userService.create(signUpDto);
     const plainUser = instanceToPlain(user) as User;
 
-    const tokens = await this.createTokens(user);
+    return plainUser;
+  }
 
-    return { plainUser, tokens };
+  async logout(refreshToken: string): Promise<object> {
+    console.log('Refresh Token from logout service', refreshToken);
+    try {
+      await this.tokenService.revokeToken(refreshToken);
+      return { statusCode: HttpStatus.OK, message: 'Logout successful' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new UnauthorizedException('Invalid refresh token');
+      } else if (error instanceof InternalServerErrorException) {
+        throw new InternalServerErrorException(
+          'An unexpected error occurred during logout',
+        );
+      }
+    }
   }
 
   async refreshTokens(
     accessToken: string,
     refreshToken: string,
-  ): Promise<string> {
+  ): Promise<object> {
     try {
-      const accessPayload = this.jwtService.verify(accessToken);
+      const accessPayload = this.jwtService.decode(accessToken);
       const refreshPayload = this.jwtService.verify(refreshToken);
 
       if (accessPayload.sub !== refreshPayload.sub) {
@@ -81,7 +96,7 @@ export class AuthService {
       }
 
       const user = await this.userService.findOne({
-        where: { email: accessPayload.sub },
+        where: { email: refreshPayload.sub },
       });
       if (!user) {
         throw new UnauthorizedException('User not found');
@@ -94,7 +109,7 @@ export class AuthService {
 
       accessToken = this.signToken(user);
 
-      return accessToken;
+      return { accessToken };
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;
@@ -136,7 +151,7 @@ export class AuthService {
     });
   }
 
-  async createTokens(user: User): Promise<object> {
+  async createTokens(user: User): Promise<TokensDto> {
     const accessToken = this.signToken(user);
     const refreshToken = this.signRefreshToken(user);
 

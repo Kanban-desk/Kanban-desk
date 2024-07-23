@@ -6,13 +6,13 @@ export class Notification {
     @PrimaryGeneratedColumn()
     notification_id: number;
 
-    @Column({ type:"varchar", length: 255 })
+    @Column({ type:"nvarchar", length: 255 })
     content: string;
 
-    @Column({ type:"varchar", length: 255 })
+    @Column({ type:"nvarchar", length: 255 })
     type: string;
 
-    @Column({type:"varchar", length: 512})
+    @Column({type:"nvarchar", length: 512})
     args: string;
 
     @Column({ type: "bit", default: 0 })

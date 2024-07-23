@@ -1,12 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import App from "./App";
+import App from "./app/App";
 import "./index.css";
-import axios from "axios";
 import { BrowserRouter } from "react-router-dom";
-
-axios.defaults.baseURL = "api";
 
 const queryClient = new QueryClient();
 
