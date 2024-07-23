@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import Input from "@/shared/ui/Input";
-import { useRegister } from "@/entities/user/model/useRegister";
-import { SignUpDto } from "@/entities/user/api/types"; 
+import { useRegister } from "@/entities/user/model/hooks/useRegister";
+import { AuthDto } from "@/entities/user/api/types"; 
 import './index.scss';
 import { /*initAuthHeader,*/ login } from "@/shared/lib/auth";
 // import axios from "axios";
@@ -48,7 +48,7 @@ const RegisterForm: FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validate()) {
-      const signUpData: SignUpDto = { email, password };
+      const signUpData: AuthDto = { email, password };
       registerMutation.mutate(signUpData);
     }
   };

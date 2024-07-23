@@ -1,5 +1,6 @@
 import { SignUpPage } from "@/pages/sign-up";
 import { Introduction } from "@/pages/introduction";
+import { LoginPage } from "@/pages/login";
 
 export const privateRoutes = [
   {
@@ -19,6 +20,6 @@ export const publicRoutes = [
   },
   {
     path: "/login",
-    element: "<Login />",
+    element: <LoginPage />,
   },
 ];

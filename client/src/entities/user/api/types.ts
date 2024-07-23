@@ -1,4 +1,4 @@
-export interface SignUpDto {
+export interface AuthDto {
   email: string;
   password: string;
 }
@@ -11,7 +11,7 @@ export interface User {
   avatar_path?: string;
 }
 
-export interface RegisterResponse {
+export interface AuthResponse {
   user: User;
   accessToken: string;
 }
