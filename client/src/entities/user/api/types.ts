@@ -4,17 +4,20 @@ export interface SignUpDto {
 }
 
 export interface User {
-  id: number;
+  user_id?: string;
   email: string;
-  password: string;
-}
-
-export interface Tokens {
-  accessToken: string;
-  refreshToken: string;
+  first_name?: string;
+  last_name?: string;
+  avatar_path?: string;
 }
 
 export interface RegisterResponse {
-  plainUser: User;
-  tokens: Tokens;
+  user: User;
+  accessToken: string;
 }
+
+// declare module "jwt-decode" {
+//   export interface JwtPayload {
+//     name?: string;
+//   }
+// }

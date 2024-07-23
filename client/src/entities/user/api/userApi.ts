@@ -7,7 +7,7 @@ import { ApiResponse } from '../../../shared/api/types';
 export const userApi = {
   register: async (signUpDto: SignUpDto): Promise<ApiResponse<RegisterResponse>> => {
     try {
-      const response = await axios.post<RegisterResponse>(`auth/register`, signUpDto);
+      const response = await axios.post<RegisterResponse>(`api/auth/register`, signUpDto);
       return { data: response.data, error: null };
     } catch (error) {
       if (error instanceof AxiosError) {

@@ -3,12 +3,18 @@ import Input from "@/shared/ui/Input";
 import { useRegister } from "@/entities/user/model/useRegister";
 import { SignUpDto } from "@/entities/user/api/types"; 
 import './index.scss';
+import { /*initAuthHeader,*/ login } from "@/shared/lib/auth";
+// import axios from "axios";
+import { useUserStore } from "@/entities/user/model/store/userStore";
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const setUser = useUserStore((state) => state.setUser);
+  const navigate = useNavigate();
 
   const registerMutation = useRegister({
     onSuccess: (response) => {
@@ -17,9 +23,10 @@ const RegisterForm: FC = () => {
         setErrors({ form: response.error });
       } else if (response.data) {
         console.log("Registration successful", response.data);
-        // Сохранить токены
-        // Обновить состояние пользователя в приложении
-        // Перенаправить пользователя на другую страницу
+        login(response.data.accessToken);
+        // initAuthHeader(axios);
+        setUser(response.data.user);
+        navigate('/introduction');
       }
     },
     onError: (error) => {

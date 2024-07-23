@@ -67,7 +67,6 @@ export class AuthController {
   @ApiBearerAuth('jwt')
   refreshTokens(@Req() req: Request) {
     const { refreshToken } = req.signedCookies;
-    // console.log(this.authService.refreshTokens(req['accessToken'], refreshToken));
     return this.authService.refreshTokens(req['accessToken'], refreshToken);
   }
 
