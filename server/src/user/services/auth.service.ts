@@ -131,7 +131,6 @@ export class AuthService {
         `There isn't any user with email: ${payload.sub}`,
       );
     }
-
     return user;
   }
 

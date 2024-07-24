@@ -9,6 +9,7 @@ type UserState = {
 type UserAction = {
     setUser: (user: UserState['user']) => void;
     clearUser: () => void;
+    updateUser: (updatedUser: User | undefined) => void;
 };
 
 export const useUserStore = create<UserState & UserAction>((set) => ({
@@ -25,4 +26,9 @@ export const useUserStore = create<UserState & UserAction>((set) => ({
     clearUser() {
         set(() => ({isAuthenticated: false, user: null}))
     },
+    updateUser(updatedUser: User | undefined) {
+        set((state) => ({
+            user: state.user ? { ...state.user, ...updatedUser } : null
+        }))
+    }
 })) 

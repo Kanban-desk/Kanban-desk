@@ -14,6 +14,7 @@ import { TokenService } from './services/token.service';
 import { TokenExtractorMiddleware } from './middleware/extract-token.middleware';
 import { Desk } from 'src/desk/entities/desk.entity';
 import { Notification } from 'src/notification/entities/notification.entity';
+import { UserController } from './controllers/user.controller';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { Notification } from 'src/notification/entities/notification.entity';
       },
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UserController],
   providers: [
     UserService,
     AuthService,

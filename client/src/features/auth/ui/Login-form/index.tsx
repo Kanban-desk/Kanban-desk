@@ -69,7 +69,7 @@ const LoginForm: FC = () => {
           error={errors.password}
         />
         <button type="submit" disabled={loginMutation.status === 'pending'}>
-          {loginMutation.status === 'pending' ? "Registering..." : "Register"}
+          {loginMutation.status === 'pending' ? "Loggin in..." : "Log in"}
         </button>
         {errors.form && <div className="login-form-error">{errors.form}</div>}
       </form>
