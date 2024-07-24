@@ -1,6 +1,7 @@
 import { SignUpPage } from "@/pages/sign-up";
 import { Introduction } from "@/pages/introduction";
 import { LoginPage } from "@/pages/login";
+import { HomePage } from "@/pages/main";
 
 export const privateRoutes = [
   {
@@ -16,7 +17,7 @@ export const privateRoutes = [
 export const publicRoutes = [
   {
     path: "/",
-    element: "<Home />",
+    element: <HomePage />,
   },
   {
     path: "/register",
@@ -27,10 +28,6 @@ export const publicRoutes = [
     element: <LoginPage />,
   },
   //temproary here in order to design them
-  {
-    path: "/introduction",
-    element: <Introduction />,
-  },
   {
     path: "/create-desk",
     element: "<CreateDesk />"
