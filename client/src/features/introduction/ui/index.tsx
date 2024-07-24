@@ -58,6 +58,7 @@ const updateUserMutation = useMutation<ApiResponse<UserUpdateResponse>, Error, U
   const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+      setAvatarFile(null);
       setAvatarPreview(URL.createObjectURL(file));
     }
   };
