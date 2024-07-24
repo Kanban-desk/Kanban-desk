@@ -1,8 +1,6 @@
-import { useUserStore } from "@/entities/user/model/store/userStore";
 import { FC } from "react";
+import { IntroductionForm } from "@/features/introduction";
 
 export const Introduction: FC = () => {
-    const user = useUserStore((set) => set.user?.email)
-
-    return <h1>Hello, {user}!</h1>
+    return <IntroductionForm />
 }

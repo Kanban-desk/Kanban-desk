@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes } from "react-router";
-import { privateRoutes, publicRoutes } from "./router/routes";
+import { privateRoutes, publicRoutes } from "./routes/routes";
 // import { getUserInfo, initAuthHeader } from "@/shared/lib/auth";
 import { useUserStore } from "@/entities/user/model/store/userStore";
 // import axios from "axios";

@@ -4,9 +4,13 @@ import { LoginPage } from "@/pages/login";
 
 export const privateRoutes = [
   {
-    path: "/introduction",
+    path: "/introductions",
     element: <Introduction />,
   },
+  {
+    path: "/create-desks",
+    element: "<CreateDesk />"
+  }
 ];
 
 export const publicRoutes = [
@@ -22,4 +26,13 @@ export const publicRoutes = [
     path: "/login",
     element: <LoginPage />,
   },
+  //temproary here in order to design them
+  {
+    path: "/introduction",
+    element: <Introduction />,
+  },
+  {
+    path: "/create-desk",
+    element: "<CreateDesk />"
+  }
 ];
