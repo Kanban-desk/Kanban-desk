@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { AuthDto, AuthResponse, User } from './types';
+import { AuthDto, AuthResponse } from './types';
 import { handleApiError } from '../../../shared/api/handleAPIErrors';
 import { ApiResponse } from '../../../shared/api/types';
 
