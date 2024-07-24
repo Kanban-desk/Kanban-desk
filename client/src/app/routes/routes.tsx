@@ -5,7 +5,7 @@ import { HomePage } from "@/pages/main";
 
 export const privateRoutes = [
   {
-    path: "/introductions",
+    path: "/introduction",
     element: <Introduction />,
   },
   {
