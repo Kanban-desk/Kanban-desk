@@ -34,7 +34,7 @@ export class User {
   @Column({ type: 'nvarchar', length: 512, nullable: true })
   avatar_path: string;
 
-  @OneToMany(() => Desk, (desk) => desk.author)
+  @OneToMany(() => Desk, (desk) => desk.author, { cascade: true })
   desks: Desk[];
 
   @OneToMany(() => Notification, (notification) => notification.user)

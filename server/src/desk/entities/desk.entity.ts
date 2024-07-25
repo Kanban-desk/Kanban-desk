@@ -10,12 +10,12 @@ export class Desk {
     @Column({ type: "nvarchar", length: 100 })
     name: string;
 
-    @Column({ type: "nvarchar", length: 100, unique: true })
+    @Column({ type: "nvarchar", length: 100 })
     avatar_path: string;
     
     @ManyToOne(() => User, (user) => user.desks)
-    author = User;
+    author: User;
 
-    @OneToMany(() => Status, (status) => status.desk)
+    @OneToMany(() => Status, (status) => status.desk, { cascade: true })
     statuses: Status[];
 }
