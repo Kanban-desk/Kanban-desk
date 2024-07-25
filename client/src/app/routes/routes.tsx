@@ -2,6 +2,7 @@ import { SignUpPage } from "@/pages/sign-up";
 import { Introduction } from "@/pages/introduction";
 import { LoginPage } from "@/pages/login";
 import { HomePage } from "@/pages/main";
+import { CreateDeskPage } from "@/pages/createDesk";
 
 export const privateRoutes = [
   {
@@ -30,6 +31,6 @@ export const publicRoutes = [
   //temproary here in order to design them
   {
     path: "/create-desk",
-    element: "<CreateDesk />"
-  }
+    element: <CreateDeskPage />
+  },
 ];
