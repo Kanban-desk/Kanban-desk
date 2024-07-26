@@ -68,7 +68,7 @@ npm install
 ```
 
 3. Create a `.env` file in both the `client` and `server` directories and add the environment variables as shown in example below:
-```json
+```bash
 NODE_ENV=development
 AZURE_SQL_SERVER=localhost
 AZURE_SQL_PORT=1433
